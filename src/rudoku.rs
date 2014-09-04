@@ -80,7 +80,7 @@ impl Clone for [[Cell, ..9], ..9] {
 
 #[deriving(Default,Clone)]
 struct Puzzle {
-    cells: ~[[Cell, ..9], ..9],
+    cells: [[Cell, ..9], ..9],
 }
 
 impl Puzzle {
