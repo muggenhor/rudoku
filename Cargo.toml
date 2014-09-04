@@ -1,0 +1,7 @@
+[package]
+name = "rudoku"
+version = "0.1.0"
+authors = ["Giel van Schijndel <me@mortis.eu"]
+
+[[bin]]
+name = "rudoku"
