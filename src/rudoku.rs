@@ -32,55 +32,36 @@ impl Default for Cell {
     }
 }
 
+impl Default for [Cell, ..9] {
+    fn default() -> [Cell, ..9] {
+        [
+            Default::default(), Default::default(), Default::default(),
+            Default::default(), Default::default(), Default::default(),
+            Default::default(), Default::default(), Default::default(),
+        ]
+    }
+}
+
 impl Default for [[Cell, ..9], ..9] {
     fn default() -> [[Cell, ..9], ..9] {
         [
-            [
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-            ],
-            [
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-            ],
-            [
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-            ],
-            [
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-            ],
-            [
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-            ],
-            [
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-            ],
-            [
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-            ],
-            [
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-            ],
-            [
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-                Default::default(), Default::default(), Default::default(),
-            ],
+            Default::default(), Default::default(), Default::default(),
+            Default::default(), Default::default(), Default::default(),
+            Default::default(), Default::default(), Default::default(),
         ]
+    }
+}
+
+impl Clone for [Cell, ..9] {
+    fn clone(&self) -> [Cell, ..9] {
+        let mut new : [Cell, ..9] = Default::default();
+        new.clone_from(self);
+        new
+    }
+    fn clone_from(&mut self, source: &[Cell, ..9]) {
+        for (src_cell, dst_cell) in source.iter().zip(self.mut_iter()) {
+            dst_cell.clone_from(src_cell);
+        }
     }
 }
 
@@ -92,9 +73,7 @@ impl Clone for [[Cell, ..9], ..9] {
     }
     fn clone_from(&mut self, source: &[[Cell, ..9], ..9]) {
         for (src_col, dst_col) in source.iter().zip(self.mut_iter()) {
-            for (src_cell, dst_cell) in src_col.iter().zip(dst_col.mut_iter()) {
-                dst_cell.clone_from(src_cell);
-            }
+            dst_col.clone_from(src_col);
         }
     }
 }
