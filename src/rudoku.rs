@@ -352,6 +352,21 @@ fn fmt_puzzle(puzzle : &Puzzle) {
     }
 }
 
+fn create_puzzle(inp : &str) -> Puzzle {
+    let mut cur_puzzle : Puzzle = Default::default();
+    for (i, c) in inp.chars().enumerate() {
+        if i > 81 {
+            break;
+        }
+
+        let (row_num, col_num) = std::num::div_rem(i, 9u);
+        if '1' <= c && c <= '9' {
+            cur_puzzle.set_item(col_num, row_num, (c as uint - '0' as uint));
+        }
+    }
+    cur_puzzle
+}
+
 /*
  * ┏━┯━┯━┳━┯━┯━┳━┯━┯━┓
  * ┃ │5│ ┃4│ │ ┃ │8│ ┃
@@ -373,37 +388,19 @@ fn fmt_puzzle(puzzle : &Puzzle) {
  * ┃ │7│ ┃ │ │ ┃8│6│ ┃
  * ┗━┷━┷━┻━┷━┷━┻━┷━┷━┛
  */
-#[cfg(test)]
-static a_puzzle : &'static str = concat!(
-    ".5.4...8.",
-    "4.6......",
-    "..3.78...",
-    "1...5.64.",
-    "..8..3...",
-    "...91....",
-    "2.9..1...",
-    "....6.27.",
-    ".7....86.",
-);
-
-fn create_puzzle(inp : &str) -> Puzzle {
-    let mut cur_puzzle : Puzzle = Default::default();
-    for (i, c) in inp.chars().enumerate() {
-        if i > 81 {
-            break;
-        }
-
-        let (row_num, col_num) = std::num::div_rem(i, 9u);
-        if '1' <= c && c <= '9' {
-            cur_puzzle.set_item(col_num, row_num, (c as uint - '0' as uint));
-        }
-    }
-    cur_puzzle
-}
-
 #[test]
-fn can_solve_puzzle() {
-    let mut cur_puzzle = create_puzzle(a_puzzle);
+fn test_can_solve_puzzle() {
+    let mut cur_puzzle = create_puzzle(concat!(
+        ".5.4...8.",
+        "4.6......",
+        "..3.78...",
+        "1...5.64.",
+        "..8..3...",
+        "...91....",
+        "2.9..1...",
+        "....6.27.",
+        ".7....86.",
+    ));
     assert!(cur_puzzle.solve());
     assert!(cur_puzzle.is_solved());
     assert!(!cur_puzzle.is_invalid());
