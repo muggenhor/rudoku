@@ -1,1 +1,13 @@
-language: rust
+#language: rust
+# everything below is only to speed things up compared to the defaults for rust, taken from instructions of rust-ci.org
+cache: apt
+before_install:
+  - env
+  - sudo add-apt-repository --yes ppa:hansjorg/rust
+  - sudo add-apt-repository --yes ppa:cmrx64/cargo
+  - sudo apt-get update -qq
+install:
+  - sudo apt-get install -qq rust-nightly cargo
+script:
+  - cargo build --verbose
+  - cargo test --verbose
