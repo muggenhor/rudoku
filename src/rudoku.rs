@@ -228,24 +228,33 @@ impl Puzzle {
         found_something
     }
 
-    fn backtrack(&mut self) -> bool {
+    fn guess(&mut self) -> bool {
         if self.is_invalid() {
             return false;
         }
 
-        for row_num in range(0, self.cells.len()) {
-            for col_num in range(0, self.cells[row_num].len()) {
-                for possibility in self.cells[row_num][col_num].possibilities.iter() {
-                    let mut tmp = self.clone();
-                    tmp.set_item(col_num, row_num, possibility);
+        // Ensure we try to guess first in cells with the fewest possibilities (i.e. biggest chance
+        // of success)
+        // TODO: persist this list in Puzzle and maintain it from set_item() using sorted inserts
+        let mut to_search_cells : Vec<(uint, uint)> = Vec::from_fn(81, |i| std::num::div_rem(i, 9u));
+        to_search_cells.retain(|&(row,col)| self.cells[row][col].possibilities.len() > 1);
+        to_search_cells.sort_by(|&(row_a,col_a),&(row_b,col_b)| {
+            let a = (self.cells[row_a][col_a].possibilities.len(), row_a, col_a);
+            let b = (self.cells[row_b][col_b].possibilities.len(), row_b, col_b);
+            a.cmp(&b)
+        });
 
-                    println!("{}:{}:backtrack({}, {}, {} in {})", file!(), line!(),
-                        col_num, row_num, possibility, self.cells[row_num][col_num].possibilities);
+        for &(row_num, col_num) in to_search_cells.iter() {
+            for possibility in self.cells[row_num][col_num].possibilities.iter() {
+                let mut tmp = self.clone();
+                tmp.set_item(col_num, row_num, possibility);
 
-                    if tmp.solve() {
-                        self.clone_from(&tmp);
-                        return true;
-                    }
+                println!("{}:{}:backtrack({}, {}, {} in {})", file!(), line!(),
+                    col_num, row_num, possibility, self.cells[row_num][col_num].possibilities);
+
+                if tmp.solve() {
+                    self.clone_from(&tmp);
+                    return true;
                 }
             }
         }
@@ -264,7 +273,7 @@ impl Puzzle {
         if self.is_solved() {
             return true;
         }
-        self.backtrack()
+        self.guess()
     }
 
     pub fn is_solved(&self) -> bool {
