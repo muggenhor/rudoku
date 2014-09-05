@@ -406,6 +406,14 @@ fn test_can_solve_puzzle() {
     assert!(!cur_puzzle.is_invalid());
 }
 
+#[test]
+fn test_can_solve_empty_puzzle() {
+    let mut cur_puzzle : Puzzle = Default::default();
+    assert!(cur_puzzle.solve());
+    assert!(cur_puzzle.is_solved());
+    assert!(!cur_puzzle.is_invalid());
+}
+
 #[cfg(not(test))]
 fn main() {
     for e_line in std::io::stdin().lines() {
