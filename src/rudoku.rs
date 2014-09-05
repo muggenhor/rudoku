@@ -373,6 +373,7 @@ fn fmt_puzzle(puzzle : &Puzzle) {
  * ┃ │7│ ┃ │ │ ┃8│6│ ┃
  * ┗━┷━┷━┻━┷━┷━┻━┷━┷━┛
  */
+#[cfg(test)]
 static a_puzzle : &'static str = concat!(
     ".5.4...8.",
     "4.6......",
@@ -410,8 +411,15 @@ fn can_solve_puzzle() {
 
 #[cfg(not(test))]
 fn main() {
-    let mut cur_puzzle = create_puzzle(a_puzzle);
-    fmt_puzzle(&cur_puzzle);
-    cur_puzzle.solve();
-    fmt_puzzle(&cur_puzzle);
+    for e_line in std::io::stdin().lines() {
+        match e_line {
+            Ok(line) => {
+                let mut cur_puzzle = create_puzzle(line.as_slice());
+                fmt_puzzle(&cur_puzzle);
+                cur_puzzle.solve();
+                fmt_puzzle(&cur_puzzle);
+            },
+            Err(e) => println!("error reading: {}", e),
+        }
+    }
 }
