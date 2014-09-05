@@ -290,6 +290,7 @@ impl Puzzle {
     }
 }
 
+#[cfg(not(test))]
 fn fmt_cell(cell : &Cell) -> &'static str {
     return match cell.value {
         Some(1) => "1",
@@ -306,6 +307,7 @@ fn fmt_cell(cell : &Cell) -> &'static str {
     }
 }
 
+#[cfg(not(test))]
 fn fmt_puzzle(puzzle : &Puzzle) {
     for row_idx in range(0, puzzle.cells.len() + 1) {
         match (row_idx / 3, row_idx % 3) {
@@ -374,7 +376,7 @@ static a_puzzle : [ [Option<uint>, .. 9], .. 9]  = [
     [ None   , Some(7), None   , None   , None   , None   , Some(8), Some(6), None   , ],
 ];
 
-fn main() {
+fn create_puzzle() -> Puzzle {
     let mut cur_puzzle : Puzzle = Default::default();
     for (row_num, row) in a_puzzle.iter().enumerate() {
         for (col_num, cell) in row.iter().enumerate() {
@@ -384,6 +386,20 @@ fn main() {
             }
         }
     }
+    cur_puzzle
+}
+
+#[test]
+fn can_solve_puzzle() {
+    let mut cur_puzzle = create_puzzle();
+    assert!(cur_puzzle.solve());
+    assert!(cur_puzzle.is_solved());
+    assert!(!cur_puzzle.is_invalid());
+}
+
+#[cfg(not(test))]
+fn main() {
+    let mut cur_puzzle = create_puzzle();
     fmt_puzzle(&cur_puzzle);
     cur_puzzle.solve();
     fmt_puzzle(&cur_puzzle);
