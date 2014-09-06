@@ -1,5 +1,8 @@
 /* vim: set et sts=4 sw=4: */
 
+#![feature(phase)]
+#[phase(plugin, link)] extern crate log;
+
 use std::collections::{BitvSet, bitv};
 use std::default::Default;
 
@@ -125,7 +128,7 @@ impl Puzzle {
                 }
             }
         }
-        println!("{}:{}:solve_select_single_possibility: found_something={}", file!(), line!(), found_something);
+        debug!("{}:{}:solve_select_single_possibility: found_something={}", file!(), line!(), found_something);
         found_something
     }
 
@@ -223,7 +226,7 @@ impl Puzzle {
             }
         }
 
-        println!("{}:{}:solve_select_single_possible_location: found_something={}", file!(), line!(), found_something);
+        debug!("{}:{}:solve_select_single_possible_location: found_something={}", file!(), line!(), found_something);
 
         found_something
     }
@@ -249,7 +252,7 @@ impl Puzzle {
                 let mut tmp = self.clone();
                 tmp.set_item(col_num, row_num, possibility);
 
-                println!("{}:{}:backtrack({}, {}, {} in {})", file!(), line!(),
+                info!("{}:{}:backtrack({}, {}, {} in {})", file!(), line!(),
                     col_num, row_num, possibility, self.cells[row_num][col_num].possibilities);
 
                 if tmp.solve() {
@@ -405,7 +408,7 @@ fn main() {
                 cur_puzzle.solve();
                 println!("{}", cur_puzzle);
             },
-            Err(e) => println!("error reading: {}", e),
+            Err(e) => error!("error reading: {}", e),
         }
     }
 }
