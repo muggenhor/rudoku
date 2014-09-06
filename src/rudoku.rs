@@ -299,20 +299,15 @@ impl Puzzle {
     }
 }
 
-#[cfg(not(test))]
-fn fmt_cell(cell : &Cell) -> &'static str {
-    return match cell.value {
-        Some(1) => "1",
-        Some(2) => "2",
-        Some(3) => "3",
-        Some(4) => "4",
-        Some(5) => "5",
-        Some(6) => "6",
-        Some(7) => "7",
-        Some(8) => "8",
-        Some(9) => "9",
-        None    => " ",
-        Some(n) => fail!("unexpected value {}", n),
+impl std::fmt::Show for Cell {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self.value {
+            Some(n) => {
+                assert!(n >= 1 && n <= 9);
+                write!(f, "{:u}", n)
+            },
+            None    => write!(f, " "),
+        }
     }
 }
 
@@ -330,15 +325,7 @@ fn fmt_puzzle(puzzle : &Puzzle) {
         }
         let row = &puzzle.cells[row_idx];
         println!("┃{}│{}│{}┃{}│{}│{}┃{}│{}│{}┃ ┃{}│{}│{}┃{}│{}│{}┃{}│{}│{}┃",
-                 fmt_cell(&row[0]),
-                 fmt_cell(&row[1]),
-                 fmt_cell(&row[2]),
-                 fmt_cell(&row[3]),
-                 fmt_cell(&row[4]),
-                 fmt_cell(&row[5]),
-                 fmt_cell(&row[6]),
-                 fmt_cell(&row[7]),
-                 fmt_cell(&row[8]),
+                 row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
                  match row[0].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
                  match row[1].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
                  match row[2].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
