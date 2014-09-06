@@ -264,8 +264,9 @@ pub fn create_puzzle(inp : &str) -> Puzzle {
         }
 
         let (row_num, col_num) = num::div_rem(i, 9u);
-        if '1' <= c && c <= '9' {
-            cur_puzzle.set_item(col_num, row_num, (c as uint - '0' as uint));
+        match c {
+            '1'..'9' => cur_puzzle.set_item(col_num, row_num, (c as uint - '0' as uint)),
+            _ => (),
         }
     }
     cur_puzzle
