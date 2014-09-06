@@ -201,18 +201,29 @@ impl Puzzle {
         });
 
         for &(row_num, col_num) in to_search_cells.iter() {
+            let (tx, rx) = channel();
             for possibility in self.cells[row_num][col_num].possibilities.iter() {
-                let mut tmp = self.clone();
-                tmp.set_item(col_num, row_num, possibility);
+                let mut tmp = box self.clone();
                 tmp.recursion_depth += 1;
 
-                info!("{}:{}:backtrack({}, {}, {} in {} [{}])", file!(), line!(),
-                    col_num, row_num, possibility, self.cells[row_num][col_num].possibilities, tmp.recursion_depth);
+                let result_tx = tx.clone();
+                spawn(proc() {
+                    info!("{}:{}:backtrack({}, {}, {} in {} [{}])", file!(), line!(),
+                        col_num, row_num, possibility, tmp.cells[row_num][col_num].possibilities, tmp.recursion_depth);
 
-                if tmp.solve() {
-                    self.clone_from(&tmp);
+                    tmp.set_item(col_num, row_num, possibility);
+                    if tmp.solve() {
+                        drop(result_tx.send_opt(tmp));
+                    }
+                });
+            }
+            drop(tx);
+            match rx.recv_opt() {
+                Ok(tmp) => {
+                    self.clone_from(&*tmp);
                     return true;
                 }
+                Err(_) => (),
             }
         }
 
