@@ -1,1 +1,19 @@
-language: rust
+#language: rust
+# everything below is only to speed things up compared to the defaults for rust
+
+cache:
+  directories:
+    - $HOME/.cache/rust
+
+before_install:
+  - ./travis-cache-download.sh http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
+  - ./travis-cache-download.sh http://static.rust-lang.org/cargo-dist/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz
+
+install:
+  - mkdir -p ~/rust
+  - tar --strip-components=1 -C ~/rust -xzf ~/.cache/rust/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
+  - tar --strip-components=1 -C ~/rust -xzf ~/.cache/rust/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz
+env: PATH=${PATH}:${HOME}/rust/bin LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${HOME}/rust/lib
+script:
+  - cargo build --verbose
+  - cargo test --verbose
