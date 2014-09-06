@@ -313,17 +313,12 @@ impl std::fmt::Show for Cell {
 
 #[cfg(not(test))]
 fn fmt_puzzle(puzzle : &Puzzle) {
-    for row_idx in range(0, puzzle.cells.len() + 1) {
-        match (row_idx / 3, row_idx % 3) {
+    for (row_idx, row) in puzzle.cells.iter().enumerate() {
+        match std::num::div_rem(row_idx, 3) {
             (0,0) => println!("┏━┯━┯━┳━┯━┯━┳━┯━┯━┓ ┏━┯━┯━┳━┯━┯━┳━┯━┯━┓"),
-            (3,0) => println!("┗━┷━┷━┻━┷━┷━┻━┷━┷━┛ ┗━┷━┷━┻━┷━┷━┻━┷━┷━┛"),
             (_,0) => println!("┣━┿━┿━╋━┿━┿━╋━┿━┿━┫ ┣━┿━┿━╋━┿━┿━╋━┿━┿━┫"),
             (_,_) => println!("┠─┼─┼─╂─┼─┼─╂─┼─┼─┨ ┠─┼─┼─╂─┼─┼─╂─┼─┼─┨"),
         };
-        if row_idx >= puzzle.cells.len() {
-            break
-        }
-        let row = &puzzle.cells[row_idx];
         println!("┃{}│{}│{}┃{}│{}│{}┃{}│{}│{}┃ ┃{}│{}│{}┃{}│{}│{}┃{}│{}│{}┃",
                  row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
                  match row[0].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
@@ -337,6 +332,7 @@ fn fmt_puzzle(puzzle : &Puzzle) {
                  match row[8].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
             );
     }
+    println!("┗━┷━┷━┻━┷━┷━┻━┷━┷━┛ ┗━┷━┷━┻━┷━┷━┻━┷━┷━┛")
 }
 
 fn create_puzzle(inp : &str) -> Puzzle {
