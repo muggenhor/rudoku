@@ -1,7 +1,5 @@
 /* vim: set et sts=4 sw=4: */
 
-#[phase(plugin, link)] extern crate log;
-
 use std::num;
 use std::collections::{BitvSet, bitv};
 use std::default::Default;
