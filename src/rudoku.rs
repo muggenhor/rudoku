@@ -315,24 +315,15 @@ impl std::fmt::Show for Cell {
 fn fmt_puzzle(puzzle : &Puzzle) {
     for (row_idx, row) in puzzle.cells.iter().enumerate() {
         match std::num::div_rem(row_idx, 3) {
-            (0,0) => println!("┏━┯━┯━┳━┯━┯━┳━┯━┯━┓ ┏━┯━┯━┳━┯━┯━┳━┯━┯━┓"),
-            (_,0) => println!("┣━┿━┿━╋━┿━┿━╋━┿━┿━┫ ┣━┿━┿━╋━┿━┿━╋━┿━┿━┫"),
-            (_,_) => println!("┠─┼─┼─╂─┼─┼─╂─┼─┼─┨ ┠─┼─┼─╂─┼─┼─╂─┼─┼─┨"),
+            (0,0) => println!("┏━┯━┯━┳━┯━┯━┳━┯━┯━┓"),
+            (_,0) => println!("┣━┿━┿━╋━┿━┿━╋━┿━┿━┫"),
+            (_,_) => println!("┠─┼─┼─╂─┼─┼─╂─┼─┼─┨"),
         };
-        println!("┃{}│{}│{}┃{}│{}│{}┃{}│{}│{}┃ ┃{}│{}│{}┃{}│{}│{}┃{}│{}│{}┃",
+        println!("┃{}│{}│{}┃{}│{}│{}┃{}│{}│{}┃",
                  row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
-                 match row[0].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
-                 match row[1].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
-                 match row[2].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
-                 match row[3].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
-                 match row[4].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
-                 match row[5].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
-                 match row[6].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
-                 match row[7].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
-                 match row[8].possibilities.len() { 0 => " ".to_owned(), n => format!("{}", n), },
             );
     }
-    println!("┗━┷━┷━┻━┷━┷━┻━┷━┷━┛ ┗━┷━┷━┻━┷━┷━┻━┷━┷━┛")
+    println!("┗━┷━┷━┻━┷━┷━┻━┷━┷━┛")
 }
 
 fn create_puzzle(inp : &str) -> Puzzle {
