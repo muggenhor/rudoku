@@ -210,6 +210,13 @@ impl Puzzle {
                 if tmp.solve() {
                     self.clone_from(&tmp);
                     return true;
+                } else {
+                    self.cells[row_num][col_num].possibilities.remove(&possibility);
+                    if self.cells[row_num][col_num].possibilities.len() == 1 {
+                        let val = self.cells[row_num][col_num].possibilities.iter().next().unwrap();
+                        self.set_item(col_num, row_num, val);
+                        return self.solve();
+                    }
                 }
             }
         }
