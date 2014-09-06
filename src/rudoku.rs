@@ -84,6 +84,7 @@ impl Clone for [[Cell, ..9], ..9] {
 #[deriving(Default,Clone)]
 struct Puzzle {
     cells: [[Cell, ..9], ..9],
+    recursion_depth : uint,
 }
 
 impl Puzzle {
@@ -251,9 +252,10 @@ impl Puzzle {
             for possibility in self.cells[row_num][col_num].possibilities.iter() {
                 let mut tmp = self.clone();
                 tmp.set_item(col_num, row_num, possibility);
+                tmp.recursion_depth += 1;
 
-                info!("{}:{}:backtrack({}, {}, {} in {})", file!(), line!(),
-                    col_num, row_num, possibility, self.cells[row_num][col_num].possibilities);
+                info!("{}:{}:backtrack({}, {}, {} in {} [{}])", file!(), line!(),
+                    col_num, row_num, possibility, self.cells[row_num][col_num].possibilities, tmp.recursion_depth);
 
                 if tmp.solve() {
                     self.clone_from(&tmp);
