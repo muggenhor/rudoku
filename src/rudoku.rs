@@ -311,19 +311,26 @@ impl std::fmt::Show for Cell {
     }
 }
 
-#[cfg(not(test))]
-fn fmt_puzzle(puzzle : &Puzzle) {
-    for (row_idx, row) in puzzle.cells.iter().enumerate() {
-        match std::num::div_rem(row_idx, 3) {
-            (0,0) => println!("┏━┯━┯━┳━┯━┯━┳━┯━┯━┓"),
-            (_,0) => println!("┣━┿━┿━╋━┿━┿━╋━┿━┿━┫"),
-            (_,_) => println!("┠─┼─┼─╂─┼─┼─╂─┼─┼─┨"),
-        };
-        println!("┃{}│{}│{}┃{}│{}│{}┃{}│{}│{}┃",
-                 row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
-            );
+impl std::fmt::Show for Puzzle {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        for (row_idx, row) in self.cells.iter().enumerate() {
+            match match std::num::div_rem(row_idx, 3) {
+                (0,0) => writeln!(f, "┏━┯━┯━┳━┯━┯━┳━┯━┯━┓"),
+                (_,0) => writeln!(f, "┣━┿━┿━╋━┿━┿━╋━┿━┿━┫"),
+                (_,_) => writeln!(f, "┠─┼─┼─╂─┼─┼─╂─┼─┼─┨"),
+            } {
+                Err(e) => return Err(e),
+                Ok(_) => (),
+            }
+            match writeln!(f, "┃{}│{}│{}┃{}│{}│{}┃{}│{}│{}┃",
+                     row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
+            ) {
+                Err(e) => return Err(e),
+                Ok(_) => (),
+            }
+        }
+        write!(f, "┗━┷━┷━┻━┷━┷━┻━┷━┷━┛")
     }
-    println!("┗━┷━┷━┻━┷━┷━┻━┷━┷━┛")
 }
 
 fn create_puzzle(inp : &str) -> Puzzle {
@@ -394,9 +401,9 @@ fn main() {
         match e_line {
             Ok(line) => {
                 let mut cur_puzzle = create_puzzle(line.as_slice());
-                fmt_puzzle(&cur_puzzle);
+                println!("{}", cur_puzzle);
                 cur_puzzle.solve();
-                fmt_puzzle(&cur_puzzle);
+                println!("{}", cur_puzzle);
             },
             Err(e) => println!("error reading: {}", e),
         }
