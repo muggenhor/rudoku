@@ -58,9 +58,9 @@ impl Puzzle {
         let row_orig = 3 * (row / 3);
         assert_eq!(col_orig % 3, 0);
         assert_eq!(row_orig % 3, 0);
-        for i in range(row_orig, row_orig + 3) {
-            for j in range(col_orig, col_orig + 3) {
-                self.cells[i][j].possibilities.remove(&val);
+        for row in self.cells.mut_iter().skip(row_orig).take(3) {
+            for cell in row.mut_iter().skip(col_orig).take(3) {
+                cell.possibilities.remove(&val);
             }
         }
 
