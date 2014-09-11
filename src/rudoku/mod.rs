@@ -199,7 +199,8 @@ impl Puzzle {
         });
 
         for &(row_num, col_num) in to_search_cells.iter() {
-            for possibility in self.cells[row_num][col_num].possibilities.iter() {
+            while ! self.cells[row_num][col_num].possibilities.len() >= 2 {
+                let possibility = self.cells[row_num][col_num].possibilities.iter().next().unwrap();
                 let mut tmp = self.clone();
                 tmp.set_item(col_num, row_num, possibility);
                 tmp.recursion_depth += 1;
@@ -212,12 +213,12 @@ impl Puzzle {
                     return true;
                 } else {
                     self.cells[row_num][col_num].possibilities.remove(&possibility);
-                    if self.cells[row_num][col_num].possibilities.len() == 1 {
-                        let val = self.cells[row_num][col_num].possibilities.iter().next().unwrap();
-                        self.set_item(col_num, row_num, val);
-                        return self.solve();
-                    }
                 }
+            }
+            if self.cells[row_num][col_num].possibilities.len() == 1 {
+                let val = self.cells[row_num][col_num].possibilities.iter().next().unwrap();
+                self.set_item(col_num, row_num, val);
+                return self.solve();
             }
         }
 
