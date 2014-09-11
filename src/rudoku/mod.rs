@@ -199,14 +199,19 @@ impl Puzzle {
         });
 
         for &(row_num, col_num) in to_search_cells.iter() {
-            while ! self.cells[row_num][col_num].possibilities.len() >= 2 {
-                let possibility = self.cells[row_num][col_num].possibilities.iter().next().unwrap();
+            let possibilities = self.cells[row_num][col_num].possibilities.clone();
+            for possibility in possibilities.iter() {
+                if self.cells[row_num][col_num].possibilities.len() == 1 {
+                    self.set_item(col_num, row_num, possibility);
+                    return self.solve();
+                }
+
                 let mut tmp = self.clone();
                 tmp.set_item(col_num, row_num, possibility);
                 tmp.recursion_depth += 1;
 
                 info!("{}:{}:backtrack({}, {}, {} in {} [{}])", file!(), line!(),
-                    col_num, row_num, possibility, self.cells[row_num][col_num].possibilities, tmp.recursion_depth);
+                    col_num, row_num, possibility, possibilities, tmp.recursion_depth);
 
                 if tmp.solve() {
                     self.clone_from(&tmp);
@@ -214,11 +219,6 @@ impl Puzzle {
                 } else {
                     self.cells[row_num][col_num].possibilities.remove(&possibility);
                 }
-            }
-            if self.cells[row_num][col_num].possibilities.len() == 1 {
-                let val = self.cells[row_num][col_num].possibilities.iter().next().unwrap();
-                self.set_item(col_num, row_num, val);
-                return self.solve();
             }
         }
 
