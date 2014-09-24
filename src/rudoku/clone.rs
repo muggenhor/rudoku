@@ -10,7 +10,7 @@ impl Clone for [Cell, ..9] {
         new
     }
     fn clone_from(&mut self, source: &[Cell, ..9]) {
-        for (src_cell, dst_cell) in source.iter().zip(self.mut_iter()) {
+        for (src_cell, dst_cell) in source.iter().zip(self.iter_mut()) {
             dst_cell.clone_from(src_cell);
         }
     }
@@ -23,7 +23,7 @@ impl Clone for [[Cell, ..9], ..9] {
         new
     }
     fn clone_from(&mut self, source: &[[Cell, ..9], ..9]) {
-        for (src_col, dst_col) in source.iter().zip(self.mut_iter()) {
+        for (src_col, dst_col) in source.iter().zip(self.iter_mut()) {
             dst_col.clone_from(src_col);
         }
     }

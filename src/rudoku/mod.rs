@@ -56,8 +56,8 @@ impl Puzzle {
         let row_orig = 3 * (row / 3);
         assert_eq!(col_orig % 3, 0);
         assert_eq!(row_orig % 3, 0);
-        for row in self.cells.mut_iter().skip(row_orig).take(3) {
-            for cell in row.mut_iter().skip(col_orig).take(3) {
+        for row in self.cells.iter_mut().skip(row_orig).take(3) {
+            for cell in row.iter_mut().skip(col_orig).take(3) {
                 cell.possibilities.remove(&val);
             }
         }
