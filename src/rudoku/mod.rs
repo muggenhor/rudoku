@@ -87,12 +87,12 @@ impl Puzzle {
         let mut found_something = false;
         for row in range(0, self.cells.len()) {
             let mut val_counts = [0u, ..9];
-            for (col, cell) in self.cells[row].iter().enumerate() {
+            for (_, cell) in self.cells[row].iter().enumerate() {
                 for val in cell.possibilities.iter() {
                     val_counts[val-1] += 1;
                 }
             }
-            for (col, cell) in self.cells[row].iter().enumerate() {
+            for (_, cell) in self.cells[row].iter().enumerate() {
                 match cell.value {
                     Some(val) => assert_eq!(val_counts[val-1], 0),
                     None => (),
