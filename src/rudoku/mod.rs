@@ -72,7 +72,7 @@ impl Puzzle {
                 if self.cells[row][col].possibilities.len() == 1 {
                     let val = match self.cells[row][col].possibilities.iter().next() {
                         Some(n) => n,
-                        None    => fail!(),
+                        None    => panic!(),
                     };
                     self.set_item(col, row, val);
                     found_something = true;
@@ -271,7 +271,7 @@ pub fn create_puzzle(inp : &str) -> Puzzle {
 
         let (row_num, col_num) = num::div_rem(i, 9u);
         match c {
-            '1'..'9' => cur_puzzle.set_item(col_num, row_num, (c as uint - '0' as uint)),
+            '1'...'9' => cur_puzzle.set_item(col_num, row_num, (c as uint - '0' as uint)),
             _ => (),
         }
     }
