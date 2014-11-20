@@ -9,7 +9,7 @@ impl fmt::Show for Cell {
         match self.value {
             Some(n) => {
                 assert!(n >= 1 && n <= 9);
-                write!(f, "{:u}", n)
+                write!(f, "{}", n)
             },
             None    => write!(f, " "),
         }

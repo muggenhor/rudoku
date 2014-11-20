@@ -25,7 +25,7 @@ impl Cell {
                     result.insert(n);
                     result
                 },
-                None => BitvSet::from_bitv(bitv::from_bytes([0b01111111, 0b11000000]))
+                None => BitvSet::from_bitv(bitv::from_bytes(&[0b01111111, 0b11000000]))
             },
         }
     }
