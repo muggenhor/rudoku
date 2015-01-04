@@ -1,6 +1,6 @@
 /* vim: set et sts=4 sw=4: */
 
-use std::collections::{BitvSet, bitv};
+use std::collections::{BitvSet, Bitv};
 use std::default::Default;
 
 mod clone;
@@ -24,7 +24,7 @@ impl Cell {
                     result.insert(n);
                     result
                 },
-                None => BitvSet::from_bitv(bitv::from_bytes(&[0b01111111, 0b11000000]))
+                None => BitvSet::from_bitv(Bitv::from_bytes(&[0b01111111, 0b11000000]))
             },
         }
     }
