@@ -33,7 +33,7 @@ impl Cell {
 
 #[deriving(Default,Clone)]
 pub struct Puzzle {
-    cells: [[Cell, ..9], ..9],
+    cells: [[Cell; 9]; 9],
     recursion_depth : uint,
 }
 
@@ -86,7 +86,7 @@ impl Puzzle {
     fn solve_select_single_possible_location(&mut self) -> bool {
         let mut found_something = false;
         for row in range(0, self.cells.len()) {
-            let mut val_counts = [0u, ..9];
+            let mut val_counts = [0u; 9];
             for (_, cell) in self.cells[row].iter().enumerate() {
                 for val in cell.possibilities.iter() {
                     val_counts[val-1] += 1;
@@ -112,7 +112,7 @@ impl Puzzle {
         }
 
         for col in range(0, self.cells[0].len()) {
-            let mut val_counts = [0u, ..9];
+            let mut val_counts = [0u; 9];
             for row in range(0, self.cells.len()) {
                 for val in self.cells[row][col].possibilities.iter() {
                     val_counts[val-1] += 1;
@@ -139,7 +139,7 @@ impl Puzzle {
 
         for row_block in range(0u, 3u) {
             for col_block in range(0u, 3u) {
-                let mut val_counts = [0u, ..9];
+                let mut val_counts = [0u; 9];
 
                 for i in range(0u, 9u) {
                     let row = row_block * 3u + i % 3u;
