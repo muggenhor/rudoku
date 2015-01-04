@@ -189,7 +189,7 @@ impl Puzzle {
         // Ensure we try to guess first in cells with the fewest possibilities (i.e. biggest chance
         // of success)
         // TODO: persist this list in Puzzle and maintain it from set_item() using sorted inserts
-        let mut to_search_cells : Vec<(uint, uint)> = Vec::from_fn(81, |i| (i / 9u, i % 9u));
+        let mut to_search_cells : Vec<(uint, uint)> = range(0, 81).map(|i| (i / 9u, i % 9u)).collect();
         to_search_cells.retain(|&(row,col)| self.cells[row][col].possibilities.len() > 1);
         to_search_cells.sort_by(|&(row_a,col_a),&(row_b,col_b)| {
             let a = (self.cells[row_a][col_a].possibilities.len(), row_a, col_a);
