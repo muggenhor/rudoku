@@ -8,7 +8,7 @@ mod clone;
 mod default;
 mod fmt;
 
-#[deriving(Clone)]
+#[derive(Clone)]
 struct Cell {
     possibilities: BitvSet,
     value : Option<uint>,
@@ -31,7 +31,7 @@ impl Cell {
     }
 }
 
-#[deriving(Default,Clone)]
+#[derive(Default,Clone)]
 pub struct Puzzle {
     cells: [[Cell; 9]; 9],
     recursion_depth : uint,
