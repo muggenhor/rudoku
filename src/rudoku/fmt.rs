@@ -2,7 +2,6 @@
 
 use rudoku::{ Cell, Puzzle };
 use std::fmt;
-use std::num;
 
 impl fmt::Show for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -19,7 +18,7 @@ impl fmt::Show for Cell {
 impl fmt::Show for Puzzle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for (row_idx, row) in self.cells.iter().enumerate() {
-            match match num::div_rem(row_idx, 3) {
+            match match (row_idx / 3, row_idx % 3) {
                 (0,0) => writeln!(f, "┏━┯━┯━┳━┯━┯━┳━┯━┯━┓"),
                 (_,0) => writeln!(f, "┣━┿━┿━╋━┿━┿━╋━┿━┿━┫"),
                 (_,_) => writeln!(f, "┠─┼─┼─╂─┼─┼─╂─┼─┼─┨"),

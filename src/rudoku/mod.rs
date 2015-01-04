@@ -1,6 +1,5 @@
 /* vim: set et sts=4 sw=4: */
 
-use std::num;
 use std::collections::{BitvSet, bitv};
 use std::default::Default;
 
@@ -190,7 +189,7 @@ impl Puzzle {
         // Ensure we try to guess first in cells with the fewest possibilities (i.e. biggest chance
         // of success)
         // TODO: persist this list in Puzzle and maintain it from set_item() using sorted inserts
-        let mut to_search_cells : Vec<(uint, uint)> = Vec::from_fn(81, |i| num::div_rem(i, 9u));
+        let mut to_search_cells : Vec<(uint, uint)> = Vec::from_fn(81, |i| (i / 9u, i % 9u));
         to_search_cells.retain(|&(row,col)| self.cells[row][col].possibilities.len() > 1);
         to_search_cells.sort_by(|&(row_a,col_a),&(row_b,col_b)| {
             let a = (self.cells[row_a][col_a].possibilities.len(), row_a, col_a);
@@ -269,7 +268,7 @@ pub fn create_puzzle(inp : &str) -> Puzzle {
             break;
         }
 
-        let (row_num, col_num) = num::div_rem(i, 9u);
+        let (row_num, col_num) = (i / 9u, i % 9u);
         match c {
             '1'...'9' => cur_puzzle.set_item(col_num, row_num, (c as uint - '0' as uint)),
             _ => (),
