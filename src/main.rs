@@ -1,7 +1,7 @@
 /* vim: set et sts=4 sw=4: */
 
 #![feature(phase)]
-#[phase(plugin, link)] extern crate log;
+#[macro_use] extern crate log;
 
 #[cfg(not(test))]
 use rudoku::create_puzzle;
