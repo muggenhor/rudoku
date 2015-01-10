@@ -3,7 +3,7 @@
 use rudoku::{ Cell, Puzzle };
 use std::fmt;
 
-impl fmt::Show for Cell {
+impl fmt::String for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.value {
             Some(n) => {
@@ -15,7 +15,7 @@ impl fmt::Show for Cell {
     }
 }
 
-impl fmt::Show for Puzzle {
+impl fmt::String for Puzzle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for (row_idx, row) in self.cells.iter().enumerate() {
             match match (row_idx / 3, row_idx % 3) {

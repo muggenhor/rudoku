@@ -39,7 +39,7 @@ pub struct Puzzle {
 impl Puzzle {
     pub fn set_item(&mut self, col : usize, row : usize, val : usize) {
         assert!(self.cells[row][col].possibilities.contains(&val),
-            "assertion failed: ({},{}): {} doesn't contain {}",
+            "assertion failed: ({},{}): {:?} doesn't contain {}",
             col, row, self.cells[row][col].possibilities, val);
         assert_eq!(self.cells[row][col].value, None);
         assert!(1 <= val && val <= 9, "assertion failed: `(1 <= val <= 9)` (val: `{}`)", val);
@@ -209,7 +209,7 @@ impl Puzzle {
                 tmp.set_item(col_num, row_num, possibility);
                 tmp.recursion_depth += 1;
 
-                info!("{}:{}:backtrack({}, {}, {} in {} [{}])", file!(), line!(),
+                info!("{}:{}:backtrack({}, {}, {} in {:?} [{}])", file!(), line!(),
                     col_num, row_num, possibility, possibilities, tmp.recursion_depth);
 
                 if tmp.solve() {
