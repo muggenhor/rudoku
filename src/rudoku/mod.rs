@@ -1,6 +1,6 @@
 /* vim: set et sts=4 sw=4: */
 
-use std::collections::{BitvSet, Bitv};
+use std::collections::{BitSet, BitVec};
 use std::default::Default;
 
 mod clone;
@@ -9,7 +9,7 @@ mod fmt;
 
 #[derive(Clone)]
 struct Cell {
-    possibilities: BitvSet,
+    possibilities: BitSet,
     value : Option<usize>,
 }
 
@@ -20,11 +20,11 @@ impl Cell {
             possibilities : match *value {
                 Some(n) => {
                     assert!(n >= 1 && n <= 9);
-                    let mut result = BitvSet::new();
+                    let mut result = BitSet::new();
                     result.insert(n);
                     result
                 },
-                None => BitvSet::from_bitv(Bitv::from_bytes(&[0b01111111, 0b11000000]))
+                None => BitSet::from_bit_vec(BitVec::from_bytes(&[0b01111111, 0b11000000]))
             },
         }
     }
@@ -46,7 +46,7 @@ impl Puzzle {
 
         self.cells[row][col].value = Some(val);
 
-        for i in range(0, 9) {
+        for i in (0 .. 9) {
             self.cells[row][i].possibilities.remove(&val);
             self.cells[i][col].possibilities.remove(&val);
         }
@@ -66,8 +66,8 @@ impl Puzzle {
 
     fn solve_select_single_possibility(&mut self) -> bool {
         let mut found_something = false;
-        for row in range(0, self.cells.len()) {
-            for col in range(0, self.cells[row].len()) {
+        for row in (0 .. self.cells.len()) {
+            for col in (0 .. self.cells[row].len()) {
                 if self.cells[row][col].possibilities.len() == 1 {
                     let val = match self.cells[row][col].possibilities.iter().next() {
                         Some(n) => n,
@@ -84,8 +84,8 @@ impl Puzzle {
 
     fn solve_select_single_possible_location(&mut self) -> bool {
         let mut found_something = false;
-        for row in range(0, self.cells.len()) {
-            let mut val_counts = [0us; 9];
+        for row in (0 .. self.cells.len()) {
+            let mut val_counts = [0; 9];
             for (_, cell) in self.cells[row].iter().enumerate() {
                 for val in cell.possibilities.iter() {
                     val_counts[val-1] += 1;
@@ -99,8 +99,8 @@ impl Puzzle {
             }
             for (val_idx, cnt) in val_counts.iter().enumerate() {
                 if *cnt == 1 {
-                    let val = val_idx + 1us;
-                    for col in range(0, self.cells[row].len()) {
+                    let val = val_idx + 1;
+                    for col in (0 .. self.cells[row].len()) {
                         if self.cells[row][col].possibilities.contains(&val) {
                             self.set_item(col, row, val);
                             found_something = true;
@@ -110,14 +110,14 @@ impl Puzzle {
             }
         }
 
-        for col in range(0, self.cells[0].len()) {
-            let mut val_counts = [0us; 9];
-            for row in range(0, self.cells.len()) {
+        for col in (0 .. self.cells[0].len()) {
+            let mut val_counts = [0; 9];
+            for row in (0 .. self.cells.len()) {
                 for val in self.cells[row][col].possibilities.iter() {
                     val_counts[val-1] += 1;
                 }
             }
-            for row in range(0, self.cells.len()) {
+            for row in (0 .. self.cells.len()) {
                 match self.cells[row][col].value {
                     Some(val) => assert_eq!(val_counts[val-1], 0),
                     None => (),
@@ -125,8 +125,8 @@ impl Puzzle {
             }
             for (val_idx, cnt) in val_counts.iter().enumerate() {
                 if *cnt == 1 {
-                    let val = val_idx + 1us;
-                    for row in range(0, self.cells.len()) {
+                    let val = val_idx + 1;
+                    for row in (0 .. self.cells.len()) {
                         if self.cells[row][col].possibilities.contains(&val) {
                             self.set_item(col, row, val);
                             found_something = true;
@@ -136,22 +136,22 @@ impl Puzzle {
             }
         }
 
-        for row_block in range(0us, 3us) {
-            for col_block in range(0us, 3us) {
-                let mut val_counts = [0us; 9];
+        for row_block in (0 .. 3) {
+            for col_block in (0 .. 3) {
+                let mut val_counts = [0; 9];
 
-                for i in range(0us, 9us) {
-                    let row = row_block * 3us + i % 3us;
-                    let col = col_block * 3us + i / 3us;
+                for i in (0 .. 9) {
+                    let row = row_block * 3 + i % 3;
+                    let col = col_block * 3 + i / 3;
 
                     for val in self.cells[row][col].possibilities.iter() {
                         val_counts[val-1] += 1;
                     }
                 }
 
-                for i in range(0us, 9us) {
-                    let row = row_block * 3us + i % 3us;
-                    let col = col_block * 3us + i / 3us;
+                for i in (0 .. 9) {
+                    let row = row_block * 3 + i % 3;
+                    let col = col_block * 3 + i / 3;
 
                     match self.cells[row][col].value {
                         Some(val) => assert_eq!(val_counts[val-1], 0),
@@ -161,10 +161,10 @@ impl Puzzle {
 
                 for (val_idx, cnt) in val_counts.iter().enumerate() {
                     if *cnt == 1 {
-                        let val = val_idx + 1us;
-                        for i in range(0us, 9us) {
-                            let row = row_block * 3us + i % 3us;
-                            let col = col_block * 3us + i / 3us;
+                        let val = val_idx + 1;
+                        for i in (0 .. 9) {
+                            let row = row_block * 3 + i % 3;
+                            let col = col_block * 3 + i / 3;
 
                             if self.cells[row][col].possibilities.contains(&val) {
                                 self.set_item(col, row, val);
@@ -189,7 +189,7 @@ impl Puzzle {
         // Ensure we try to guess first in cells with the fewest possibilities (i.e. biggest chance
         // of success)
         // TODO: persist this list in Puzzle and maintain it from set_item() using sorted inserts
-        let mut to_search_cells : Vec<(usize, usize)> = range(0, 81).map(|i| (i / 9us, i % 9us)).collect();
+        let mut to_search_cells : Vec<(usize, usize)> = (0 .. 81).map(|i| (i / 9, i % 9)).collect();
         to_search_cells.retain(|&(row,col)| self.cells[row][col].possibilities.len() > 1);
         to_search_cells.sort_by(|&(row_a,col_a),&(row_b,col_b)| {
             let a = (self.cells[row_a][col_a].possibilities.len(), row_a, col_a);
@@ -268,7 +268,7 @@ pub fn create_puzzle(inp : &str) -> Puzzle {
             break;
         }
 
-        let (row_num, col_num) = (i / 9us, i % 9us);
+        let (row_num, col_num) = (i / 9, i % 9);
         match c {
             '1'...'9' => cur_puzzle.set_item(col_num, row_num, (c as usize - '0' as usize)),
             _ => (),

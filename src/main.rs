@@ -11,7 +11,7 @@ mod test;
 
 #[cfg(not(test))]
 fn main() {
-    for e_line in std::old_io::stdin().lock().lines() {
+    for e_line in std::io::stdin().lock().lines() {
         match e_line {
             Ok(line) => {
                 let mut cur_puzzle = create_puzzle(line.as_slice());
