@@ -1,5 +1,6 @@
 /* vim: set et sts=4 sw=4: */
 
+#![feature(collections)]
 #![feature(convert)]
 
 #[macro_use] extern crate log;
