@@ -30,7 +30,6 @@ impl Cell {
     }
 }
 
-#[derive(Default,Clone)]
 pub struct Puzzle {
     cells: [[Cell; 9]; 9],
     recursion_depth : usize,

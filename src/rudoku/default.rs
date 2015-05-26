@@ -1,6 +1,6 @@
 /* vim: set et sts=4 sw=4: */
 
-use rudoku::Cell;
+use rudoku::{ Cell, Puzzle };
 use std::default::Default;
 
 impl Default for Cell {
@@ -9,22 +9,38 @@ impl Default for Cell {
     }
 }
 
-impl Default for [Cell; 9] {
-    fn default() -> [Cell; 9] {
-        [
-            Default::default(), Default::default(), Default::default(),
-            Default::default(), Default::default(), Default::default(),
-            Default::default(), Default::default(), Default::default(),
-        ]
-    }
-}
-
-impl Default for [[Cell; 9]; 9] {
-    fn default() -> [[Cell; 9]; 9] {
-        [
-            Default::default(), Default::default(), Default::default(),
-            Default::default(), Default::default(), Default::default(),
-            Default::default(), Default::default(), Default::default(),
-        ]
+impl Default for Puzzle {
+    fn default() -> Puzzle {
+        Puzzle { cells: [
+            [Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),],
+            [Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),],
+            [Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),],
+            [Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),],
+            [Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),],
+            [Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),],
+            [Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),],
+            [Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),],
+            [Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),
+             Default::default(), Default::default(), Default::default(),],
+         ],
+         recursion_depth: Default::default(),
+        }
     }
 }
