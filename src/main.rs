@@ -1,10 +1,14 @@
 /* vim: set et sts=4 sw=4: */
 
+#![feature(convert)]
+
 #[macro_use] extern crate log;
 extern crate env_logger;
 
 #[cfg(not(test))]
 use rudoku::create_puzzle;
+#[cfg(not(test))]
+use std::io::BufRead;
 
 mod rudoku;
 #[cfg(test)]
@@ -14,10 +18,11 @@ mod test;
 fn main() {
     env_logger::init().unwrap();
 
-    for e_line in std::io::stdin().lock().lines() {
+    let stdin = &std::io::stdin();
+    for e_line in stdin.lock().lines() {
         match e_line {
             Ok(line) => {
-                let mut cur_puzzle = create_puzzle(line.as_slice());
+                let mut cur_puzzle = create_puzzle(line.as_str());
                 println!("{}", cur_puzzle);
                 cur_puzzle.solve();
                 println!("{}", cur_puzzle);
