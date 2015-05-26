@@ -1,7 +1,8 @@
 /* vim: set et sts=4 sw=4: */
 
-use std::collections::{BitSet, BitVec};
+use std::collections::btree_set::BTreeSet;
 use std::default::Default;
+use std::iter::FromIterator;
 
 mod clone;
 mod default;
@@ -9,7 +10,7 @@ mod fmt;
 
 #[derive(Clone)]
 struct Cell {
-    possibilities: BitSet,
+    possibilities: BTreeSet<usize>,
     value : Option<usize>,
 }
 
@@ -17,15 +18,13 @@ impl Cell {
     fn new(value : &Option<usize>) -> Cell {
         Cell {
             value : *value,
-            possibilities : match *value {
+            possibilities : BTreeSet::from_iter(match *value {
                 Some(n) => {
                     assert!(n >= 1 && n <= 9);
-                    let mut result = BitSet::new();
-                    result.insert(n);
-                    result
+                    n .. n + 1
                 },
-                None => BitSet::from_bit_vec(BitVec::from_bytes(&[0b01111111, 0b11000000]))
-            },
+                None => 1 .. 10,
+            }),
         }
     }
 }
@@ -69,7 +68,7 @@ impl Puzzle {
             for col in (0 .. self.cells[row].len()) {
                 if self.cells[row][col].possibilities.len() == 1 {
                     let val = match self.cells[row][col].possibilities.iter().next() {
-                        Some(n) => n,
+                        Some(n) => *n,
                         None    => panic!(),
                     };
                     self.set_item(col, row, val);
@@ -200,12 +199,12 @@ impl Puzzle {
             let possibilities = self.cells[row_num][col_num].possibilities.clone();
             for possibility in possibilities.iter() {
                 if self.cells[row_num][col_num].possibilities.len() == 1 {
-                    self.set_item(col_num, row_num, possibility);
+                    self.set_item(col_num, row_num, *possibility);
                     return self.solve();
                 }
 
                 let mut tmp = self.clone();
-                tmp.set_item(col_num, row_num, possibility);
+                tmp.set_item(col_num, row_num, *possibility);
                 tmp.recursion_depth += 1;
 
                 info!("{}:{}:backtrack({}, {}, {} in {:?} [{}])", file!(), line!(),
